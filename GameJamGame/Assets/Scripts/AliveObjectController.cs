@@ -46,7 +46,7 @@ public BoxCollider hitBox;
 		}
 
 		
-		if (Input.GetKeyDown(KeyCode.Space) && canMove) {
+		if (Input.GetButton("Jump") && canMove) {
 			if (!onAir) {
 				//anim.SetBool("onAir",true);
 				GetComponent<Rigidbody>().AddForce(transform.up * jumpPower);
@@ -61,27 +61,10 @@ public BoxCollider hitBox;
 	}
 
 	void Update() {
-		if (Input.GetMouseButtonDown(0)) {
+		if (Input.GetButton("Fire3")) {
+			Debug.Log("Ataco");
 			Attack ();
 		}
-	}
-
-	private void readyHit() 
-	{
-		int r = 1;
-		if (!right) r =-1; 
-		hitBox.GetComponent<Hitbox>().direction = r*this.transform.right + this.transform.up*3f;
-		//anim.SetTrigger("Attack");
-	}
-	
-	public void Hit() 
-	{
-		hitBox.GetComponent<Collider2D>().enabled= true;
-	}
-	
-	public void EndHit() 
-	{
-		hitBox.GetComponent<Collider2D>().enabled= false;
 	}
 
 	void OnCollisionEnter(Collision crash) {
