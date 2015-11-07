@@ -74,7 +74,7 @@ public GameObject hitbox;
 	}
 	
 	
-	void OnCollisionEnter(Collision crash) {
+	/*void OnCollisionEnter(Collision crash) {
 		if (crash.gameObject.layer == LayerMask.NameToLayer("Floor")){ 		
 			if (onAir) {
 				//anim.SetBool("onAir",false);
@@ -91,7 +91,7 @@ public GameObject hitbox;
 				dJump = false;
 		}
 	
-	}
+	}*/
 	
 	public abstract void Attack();
 }
