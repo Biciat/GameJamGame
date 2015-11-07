@@ -9,7 +9,6 @@ public class OnHitColliderScript : MonoBehaviour {
 			if (other.gameObject.tag == "Player" ){
 				int damageAmount = GetComponentInParent<AliveObjectStats>().attackDamage;
 				other.gameObject.GetComponent<AliveObjectStats>().getHurt (damageAmount);
-				Debug.Log("PPPPPPPPPPPPPPPAAAAAAAAAAAAAAAAAAAAAAAAM");
 			}
 		}
 	}

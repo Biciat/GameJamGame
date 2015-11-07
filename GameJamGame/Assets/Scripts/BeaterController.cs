@@ -8,7 +8,7 @@ public class BeaterController : AliveObjectController {
 
 	[Header("Dizziness options")]
 	public float dizzinessMax = 10f; 
-	public float dizziPerClick = 2f; 
+	public float dizzinessPerClick = 2f; 
 	public float secondsToResetDizziness = 2.0f; 
 	public float secondsDizzy = 3.0f; 
 
@@ -27,17 +27,11 @@ public class BeaterController : AliveObjectController {
 			if (!isAttacking) {
 				StartCoroutine ("StartAttack");
 			}
-			currentDizziness += dizziPerClick; 
+			currentDizziness += dizzinessPerClick; 
 			if (currentDizziness >= dizzinessMax) {
-				Debug.Log ("FUUU QUE MAREOOOO"); 
 				StartCoroutine ("Dizzy");
 			}
 		}
-	}
-
-	// Use this for initialization
-	void Start () {
-
 	}
 
 	IEnumerator Dizzy() {
