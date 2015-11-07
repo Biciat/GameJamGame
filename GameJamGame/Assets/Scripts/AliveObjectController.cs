@@ -4,16 +4,21 @@ using System.Collections;
 abstract public class AliveObjectController : MonoBehaviour {
 
 
+[Header("Animation options")]
 public Animator anim;
+
+[Header("Movement options")]
 public float speed = 0.8f;
 public float jumpPower = 200;
 
-private bool onAir = true;
-private bool dJump = false;
+public bool onAir = true;
+public bool dJump = false;
 private bool Guard = false;
 
-public bool right = true;
-public GameObject hitbox;
+private bool right = true;
+
+[Header("Attack options")]
+public BoxCollider hitBox;
 
 	// Use this for initialization
 	void Start () {
@@ -55,27 +60,33 @@ public GameObject hitbox;
 		}
 	}
 
+	void Update() {
+		if (Input.GetMouseButtonDown(0)) {
+			Attack ();
+		}
+	}
+
 	private void readyHit() 
 	{
 		int r = 1;
 		if (!right) r =-1; 
-		hitbox.GetComponent<Hitbox>().direction = r*this.transform.right + this.transform.up*3f;
+		hitBox.GetComponent<Hitbox>().direction = r*this.transform.right + this.transform.up*3f;
 		//anim.SetTrigger("Attack");
 	}
 	
 	public void Hit() 
 	{
-		hitbox.GetComponent<Collider2D>().enabled= true;
+		hitBox.GetComponent<Collider2D>().enabled= true;
 	}
 	
 	public void EndHit() 
 	{
-		hitbox.GetComponent<Collider2D>().enabled= false;
+		hitBox.GetComponent<Collider2D>().enabled= false;
 	}
 	
 	
 	void OnCollisionEnter(Collision crash) {
-		if (crash.gameObject.layer == LayerMask.NameToLayer("Floor")){ 		
+		if (crash.gameObject.layer.Equals(LayerMask.NameToLayer("Floor"))){ 		
 			if (onAir) {
 				//anim.SetBool("onAir",false);
 				onAir = false;

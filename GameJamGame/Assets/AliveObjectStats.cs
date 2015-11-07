@@ -18,6 +18,7 @@ public class AliveObjectStats : MonoBehaviour {
 		remainingLife -= damageReceived;
 		if (remainingLife <= 0) {
 			dead=true;
+			Die();
 		}
 	}
 
@@ -28,5 +29,9 @@ public class AliveObjectStats : MonoBehaviour {
 
 	public bool isDead() {
 		return dead;
+	}
+
+	private void Die() {
+		Destroy (gameObject); 
 	}
 }
