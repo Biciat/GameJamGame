@@ -28,15 +28,17 @@ public class ToasterController : AliveObjectController {
 	}
 	
 	void Update () {
-		if(Input.GetKeyDown(KeyCode.UpArrow) && shotToasts+1 < maxToasts){
+		if(Input.GetKeyDown(KeyCode.UpArrow) && shotToasts < maxToasts){
 			if(cont >= rateCounter){
 				cont = 0;
 				shotIdle = 0;
 				Attack();
 			}
 		}
-		if(shotIdle >= shotIdleTime){
-			shotToasts = -1;
+		else shotIdle += Time.deltaTime;
+		if(shotIdle >= shotIdleTime && shotToasts < maxToasts){
+			shotToasts = 0;
+			cont = rateCounter;
 		}
 		if (cont < rateCounter)
 			cont += Time.deltaTime;
@@ -50,8 +52,6 @@ public class ToasterController : AliveObjectController {
 			shotToasts = 0;
 			onRecharge = false;
 		}
-		shotIdle += Time.deltaTime;
-		
 	}
 	
 	public override void Attack() {

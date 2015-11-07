@@ -30,7 +30,6 @@ public BoxCollider hitBox;
 	
 		float yin = Input.GetAxis("Vertical");
 		float move = Input.GetAxis("Horizontal");
-
 		//anim.SetFloat("Movement", Mathf.Abs(move));
 	
 		//face right or left
