@@ -2,13 +2,13 @@
 using System.Collections;
 
 public class ToasterController : AliveObjectController {
-
+	
 	//Public
 	public float toastSpeed = 3.0f;
 	public int maxToasts = 2;
 	public int toastDamage = 1;
 	public float rechargeTime = 0.75f;
-
+	
 	//Private
 	private GameObject toast;
 	private float rateCounter = 0.05f;
@@ -19,14 +19,14 @@ public class ToasterController : AliveObjectController {
 	private float shotIdle = 0;
 	private float shotIdleTime = 0.5f;
 	private GameObject toasterSpot;
-
+	
 	void Start () {
 		//Load toast prefab
 		toast = Resources.Load ("Toast") as GameObject;
 		cont = rateCounter;
 		toasterSpot = transform.FindChild ("ToastMakerSpot").gameObject;
 	}
-
+	
 	void Update () {
 		if(Input.GetKeyDown(KeyCode.UpArrow) && shotToasts+1 < maxToasts){
 			if(cont >= rateCounter){
@@ -51,14 +51,14 @@ public class ToasterController : AliveObjectController {
 			onRecharge = false;
 		}
 		shotIdle += Time.deltaTime;
-
+		
 	}
-
- 	public override void Attack() {
+	
+	public override void Attack() {
 		Debug.Log ("<color=purple>Eat that fucking toast bitch!</color>");
 		ShotToast ();
 	}
-
+	
 	public void ShotToast(){
 		GameObject new_toast = Instantiate (toast, toasterSpot.transform.position, Quaternion.identity) as GameObject;
 		Debug.Log (transform.tag);
