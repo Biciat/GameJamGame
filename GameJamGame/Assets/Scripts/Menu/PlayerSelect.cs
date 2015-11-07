@@ -3,28 +3,45 @@ using System.Collections;
 
 public class PlayerSelect : MonoBehaviour {
 
+    float basex;
+    float basey;
+
     Vector3 startPos;
     Vector3 endPos;
 
     bool moving = false;
     float speed = 0.2f;
-    float travelTime = 1f;
+    float travelTime = 0.6f;
     float startTime;
 	// Use this for initialization
 	void Start () {
-	
-	}
+
+        basex = transform.localScale.x;
+        basey = transform.localScale.y;
+
+    }
 	
 	// Update is called once per frame
 	void Update () {
 	
 	}
 
+     float boingspeed = 0.3f;
+     float boinglength = 0.1f;
+
     void FixedUpdate() {
+        // this.transform.localScale
+        
+       transform.localScale = new Vector3(basex + Mathf.PingPong(Time.time * boingspeed, boinglength),
+           Mathf.PingPong(Time.time * boingspeed, boinglength) + basey, 1f);
+        
+
+
         if (moving) {
             float distCovered = (Time.time - startTime) * speed;
             float fracJourney = (Time.time - startTime) / travelTime;
             transform.position = Vector3.Slerp(startPos, endPos, fracJourney);
+            if (fracJourney > 1f) moving = false;
 
         }
 
