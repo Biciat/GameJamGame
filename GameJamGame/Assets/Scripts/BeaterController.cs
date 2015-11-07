@@ -26,7 +26,6 @@ public class BeaterController : AliveObjectController {
 		if (currentDizziness >= dizzinessMax) {
 			Debug.Log ("FUUU QUE MAREOOOO"); 
 		}
-
 	}
 
 	// Use this for initialization

@@ -83,8 +83,7 @@ public BoxCollider hitBox;
 	{
 		hitBox.GetComponent<Collider2D>().enabled= false;
 	}
-	
-	
+
 	void OnCollisionEnter(Collision crash) {
 		if (crash.gameObject.layer.Equals(LayerMask.NameToLayer("Floor"))){ 		
 			if (onAir) {
@@ -102,7 +101,7 @@ public BoxCollider hitBox;
 				dJump = false;
 		}
 	
-	}
+	}*/
 	
 	public abstract void Attack();
 }
