@@ -15,7 +15,7 @@ public bool onAir = true;
 public bool dJump = false;
 private bool Guard = false;
 
-private bool right = true;
+public bool right = true;
 
 [Header("Attack options")]
 public BoxCollider hitBox;
@@ -101,7 +101,7 @@ public BoxCollider hitBox;
 				dJump = false;
 		}
 	
-	}*/
+	}
 	
 	public abstract void Attack();
 }
