@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class AliveObjectController : MonoBehaviour {
+abstract public class AliveObjectController : MonoBehaviour {
 
 
 public Animator anim;
@@ -17,7 +17,7 @@ public GameObject hitbox;
 
 	// Use this for initialization
 	void Start () {
-		anim = gameObject.GetComponent<Animator>();
+		//anim = gameObject.GetComponent<Animator>();
 	}
 	
 	// Update is called once per frame
@@ -43,7 +43,7 @@ public GameObject hitbox;
 		
 		if (Input.GetKeyDown(KeyCode.Space)) {
 			if (!onAir) {
-				anim.SetBool("onAir",true);
+				//anim.SetBool("onAir",true);
 				GetComponent<Rigidbody>().AddForce(transform.up * jumpPower);
 				onAir = true;
 			} else if (!dJump) {
@@ -60,7 +60,7 @@ public GameObject hitbox;
 		int r = 1;
 		if (!right) r =-1; 
 		hitbox.GetComponent<Hitbox>().direction = r*this.transform.right + this.transform.up*3f;
-		anim.SetTrigger("Attack");
+		//anim.SetTrigger("Attack");
 	}
 	
 	public void Hit() 
@@ -93,4 +93,5 @@ public GameObject hitbox;
 	
 	}
 	
+	public abstract void Attack();
 }
