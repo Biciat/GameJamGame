@@ -10,21 +10,28 @@ public class BeaterController : AliveObjectController {
 	public float dizzinessMax = 10f; 
 	public float dizziPerClick = 2f; 
 	public float secondsToResetDizziness = 2.0f; 
+	public float secondsDizzy = 3.0f; 
 
 	private bool isAttacking = false;
 	private float currentDizziness; 
-	private float timeElapsedSinceLastClick; 
+	private float lastAttack; 
+	private bool dizzy = false; 
+
 	public override void Attack ()
 	{
-		if (timeElapsedSinceLastClick >= secondsToResetDizziness) {
-			currentDizziness = 0f; 
-		} 
-		if (!isAttacking) {
-			StartCoroutine ("startAttack");
-		}
-		currentDizziness += dizziPerClick; 
-		if (currentDizziness >= dizzinessMax) {
-			Debug.Log ("FUUU QUE MAREOOOO"); 
+		if (!dizzy) {
+			if (Time.time - lastAttack >= secondsToResetDizziness) {
+				currentDizziness = 0f; 
+			} 
+			lastAttack = Time.time; 
+			if (!isAttacking) {
+				StartCoroutine ("StartAttack");
+			}
+			currentDizziness += dizziPerClick; 
+			if (currentDizziness >= dizzinessMax) {
+				Debug.Log ("FUUU QUE MAREOOOO"); 
+				StartCoroutine ("Dizzy");
+			}
 		}
 	}
 
@@ -33,7 +40,15 @@ public class BeaterController : AliveObjectController {
 
 	}
 
-	IEnumerator startAttack() {
+	IEnumerator Dizzy() {
+		dizzy = true; 
+		canMove = false; 
+		yield return new WaitForSeconds (secondsDizzy); 
+		dizzy = false; 
+		canMove = true; 
+	}
+
+	IEnumerator StartAttack() {
 		isAttacking = true;
 		hitBox.GetComponent<BoxCollider> ().enabled = true;
 		yield return new WaitForSeconds(animationAttackTime);

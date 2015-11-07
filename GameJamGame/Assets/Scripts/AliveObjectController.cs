@@ -10,6 +10,7 @@ public Animator anim;
 [Header("Movement options")]
 public float speed = 0.8f;
 public float jumpPower = 200;
+public bool canMove = true; 
 
 public bool onAir = true;
 public bool dJump = false;
@@ -33,7 +34,7 @@ public BoxCollider hitBox;
 		//anim.SetFloat("Movement", Mathf.Abs(move));
 	
 		//face right or left
-		if (move != 0) {
+		if (move != 0 && canMove) {
 			if (move < 0) {
 				right = false;
 			}
@@ -45,7 +46,7 @@ public BoxCollider hitBox;
 		}
 
 		
-		if (Input.GetKeyDown(KeyCode.Space)) {
+		if (Input.GetKeyDown(KeyCode.Space) && canMove) {
 			if (!onAir) {
 				//anim.SetBool("onAir",true);
 				GetComponent<Rigidbody>().AddForce(transform.up * jumpPower);
