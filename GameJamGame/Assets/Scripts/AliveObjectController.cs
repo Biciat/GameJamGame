@@ -14,8 +14,11 @@ public bool canMove = true;
 
 public bool onAir = true;
 public bool dJump = false;
+public bool isJumping= false;
 private bool Guard = false;
-
+private bool counterAllow =false;
+private float dJumpTime = 0.05f;
+private float dCounter =0; 
 public bool right = true;
 
 [Header("Attack options")]
@@ -45,17 +48,28 @@ public BoxCollider hitBox;
 			this.transform.position += new Vector3(move,0.0f,0.0f);
 		}
 
-		
+		Vector3 down = transform.TransformDirection(Vector3.down);
+		RaycastHit hit;
+		float distanceToGround = 0;
+		if (Input.GetButtonUp ("Jump")) {
+			counterAllow = true;
+		}
 		if (Input.GetButton("Jump") && canMove) {
-			if (!onAir) {
+			if (Physics.Raycast(transform.position, -Vector3.up, out hit, 100.0F)) {
+				distanceToGround = hit.distance;
+			}
+			
+			if (distanceToGround < 0.1 ) { //&& !onAir) {
 				//anim.SetBool("onAir",true);
 				GetComponent<Rigidbody>().AddForce(transform.up * jumpPower);
-				onAir = true;
-			} else if (!dJump) {
+				isJumping = true;
+			}
+			if (!dJump && counterAllow) {
 				//anim.SetTrigger("Jump");
-				GetComponent<Rigidbody>().velocity = new Vector2(GetComponent<Rigidbody>().velocity.x,0);
-				GetComponent<Rigidbody>().AddForce(transform.up * jumpPower);
+				GetComponent<Rigidbody>().velocity = new Vector3(GetComponent<Rigidbody>().velocity.x,0,0);
+				GetComponent<Rigidbody>().AddForce((transform.up * jumpPower));
 				dJump = true;
+				counterAllow = false;
 			}
 		}
 	}
@@ -69,21 +83,18 @@ public BoxCollider hitBox;
 
 	void OnCollisionEnter(Collision crash) {
 		if (crash.gameObject.layer.Equals(LayerMask.NameToLayer("Floor"))){ 		
-			if (onAir) {
-				//anim.SetBool("onAir",false);
-				onAir = false;
-				dJump = false;
-			}
+			//anim.SetBool("onAir",false);
+			dJump = false;
+			isJumping = false;
+			counterAllow = false;
 		}
 	  }
 	
 	void OnCollisionExit(Collision coll) {
 		if (coll.gameObject.layer == LayerMask.NameToLayer("Floor")) { 		
 				//anim.SetBool("onAir",true);
-				onAir = true;
 				dJump = false;
 		}
-	
 	}
 	
 	public abstract void Attack();
