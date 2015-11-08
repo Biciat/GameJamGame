@@ -11,14 +11,17 @@ public class PlayerSelect : MonoBehaviour {
 
     bool moving = false;
     float speed = 0.2f;
-    float travelTime = 0.6f;
+    float travelTime = 0.5f;
     float startTime;
+    public ToBattle battleButton;
+    AudioSource mySound;
+
 	// Use this for initialization
 	void Start () {
 
         basex = transform.localScale.x;
         basey = transform.localScale.y;
-
+        mySound = GetComponent<AudioSource>();
     }
 	
 	// Update is called once per frame
@@ -41,7 +44,9 @@ public class PlayerSelect : MonoBehaviour {
             float distCovered = (Time.time - startTime) * speed;
             float fracJourney = (Time.time - startTime) / travelTime;
             transform.position = Vector3.Slerp(startPos, endPos, fracJourney);
-            if (fracJourney > 1f) moving = false;
+            if (fracJourney > 1f) {
+                battleButton.doDance();
+                moving = false; }
 
         }
 
@@ -49,12 +54,12 @@ public class PlayerSelect : MonoBehaviour {
 
     public void moveTo(float x, float y) {
         endPos = new Vector3(x, y, 0.0f);
-        moving = true;
         startTime = Time.time;
 
+
+        moving = true;
+        mySound.Play();
         startPos = new Vector3(this.transform.position.x, this.transform.position.y, 0.0f);
-
-
     }
 
 }

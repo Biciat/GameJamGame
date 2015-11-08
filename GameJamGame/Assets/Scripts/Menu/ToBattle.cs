@@ -1,15 +1,18 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System;
 
 public class ToBattle : MonoBehaviour {
 
     public SlotSelector player1;
     public SlotSelector player2;
-
+    Animation myDance;
+    AudioSource mySound;
     static int NEXT_LEVEL = 1;
 	// Use this for initialization
 	void Start () {
-	
+        myDance = GetComponent<Animation>();
+        mySound = GetComponent<AudioSource>();
 	}
 	
 	// Update is called once per frame
@@ -23,10 +26,19 @@ public class ToBattle : MonoBehaviour {
 
         PlayerPrefs.SetInt("p1",charP1);
         PlayerPrefs.SetInt("p2", charP2);
+        mySound.Play();
+        StartCoroutine(LoadScene());
+    }
 
+    IEnumerator LoadScene()
+    {
+        yield return new WaitForSeconds(.9f);
         Application.LoadLevel(NEXT_LEVEL);
 
     }
 
-
+    internal void doDance()
+    {
+        myDance.Play();
+    }
 }
