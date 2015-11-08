@@ -14,8 +14,11 @@ public bool canMove = true;
 
 public bool onAir = true;
 public bool dJump = false;
+public bool isJumping= false;
 private bool Guard = false;
-
+private bool counterAllow =false;
+private float dJumpTime = 0.05f;
+private float dCounter =0; 
 public bool right = true;
 
 [Header("Attack options")]
@@ -45,62 +48,53 @@ public BoxCollider hitBox;
 			this.transform.position += new Vector3(move,0.0f,0.0f);
 		}
 
-		
-		if (Input.GetKeyDown(KeyCode.Space) && canMove) {
-			if (!onAir) {
+		Vector3 down = transform.TransformDirection(Vector3.down);
+		RaycastHit hit;
+		float distanceToGround = 0;
+		if (Input.GetButtonUp ("Jump")) {
+			counterAllow = true;
+		}
+		if (Input.GetButton("Jump") && canMove) {
+			if (Physics.Raycast(transform.position, -Vector3.up, out hit, 100.0F)) {
+				distanceToGround = hit.distance;
+			}
+			
+			if (distanceToGround < 0.1 ) { //&& !onAir) {
 				//anim.SetBool("onAir",true);
 				GetComponent<Rigidbody>().AddForce(transform.up * jumpPower);
-				onAir = true;
-			} else if (!dJump) {
+				isJumping = true;
+			}
+			if (!dJump && counterAllow) {
 				//anim.SetTrigger("Jump");
-				GetComponent<Rigidbody>().velocity = new Vector2(GetComponent<Rigidbody>().velocity.x,0);
-				GetComponent<Rigidbody>().AddForce(transform.up * jumpPower);
+				GetComponent<Rigidbody>().velocity = new Vector3(GetComponent<Rigidbody>().velocity.x,0,0);
+				GetComponent<Rigidbody>().AddForce((transform.up * jumpPower));
 				dJump = true;
+				counterAllow = false;
 			}
 		}
 	}
 
 	void Update() {
-		if (Input.GetMouseButtonDown(0)) {
+		if (Input.GetButton("Fire3")) {
+			Debug.Log("Ataco");
 			Attack ();
 		}
 	}
 
-	private void readyHit() 
-	{
-		int r = 1;
-		if (!right) r =-1; 
-		hitBox.GetComponent<Hitbox>().direction = r*this.transform.right + this.transform.up*3f;
-		//anim.SetTrigger("Attack");
-	}
-	
-	public void Hit() 
-	{
-		hitBox.GetComponent<Collider2D>().enabled= true;
-	}
-	
-	public void EndHit() 
-	{
-		hitBox.GetComponent<Collider2D>().enabled= false;
-	}
-
 	void OnCollisionEnter(Collision crash) {
 		if (crash.gameObject.layer.Equals(LayerMask.NameToLayer("Floor"))){ 		
-			if (onAir) {
-				//anim.SetBool("onAir",false);
-				onAir = false;
-				dJump = false;
-			}
+			//anim.SetBool("onAir",false);
+			dJump = false;
+			isJumping = false;
+			counterAllow = false;
 		}
 	  }
 	
 	void OnCollisionExit(Collision coll) {
 		if (coll.gameObject.layer == LayerMask.NameToLayer("Floor")) { 		
 				//anim.SetBool("onAir",true);
-				onAir = true;
 				dJump = false;
 		}
-	
 	}
 	
 	public abstract void Attack();
