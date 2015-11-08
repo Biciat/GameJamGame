@@ -108,10 +108,10 @@ public BoxCollider hitBox;
 				counterAllow = false;
 			}
 		}
-		if (Input.GetMouseButtonDown(0) && transform.tag == "Player1") {
+		if (Input.GetKeyDown (KeyCode.E) && transform.tag == "Player1") {
 			Attack ();
 		}
-		else if (Input.GetKeyDown (KeyCode.JoystickButton2) && transform.tag == "Player2") {
+		else if (Input.GetKeyDown (KeyCode.Keypad0) && transform.tag == "Player2") {
 			Attack ();
 		}
 	}
