@@ -9,6 +9,8 @@ public class AliveObjectStats : MonoBehaviour {
 	private bool dead;
 	private int remainingLife;
 
+    public LifeBar myLife;
+
 	// Use this for initialization
 	void Start () {
 		resetStats ();
@@ -17,10 +19,13 @@ public class AliveObjectStats : MonoBehaviour {
 	public void getHurt(int damageReceived) {
 		remainingLife -= damageReceived;
 		GetComponent<Animator> ().SetBool ("hit", true);
-		if (remainingLife <= 0) {
-			dead=true;
-			Die();
-		}
+        if (remainingLife <= 0)
+        {
+            dead = true;
+            Die();
+        }
+        myLife.youGotHit(remainingLife);
+
 	}
 
 	public void resetStats() {
@@ -34,6 +39,15 @@ public class AliveObjectStats : MonoBehaviour {
 
 	private void Die() {
 		GetComponent<Animator> ().SetBool ("die", true);
-		Destroy (gameObject, 3.0f); 
+	//	Destroy (gameObject, 3.0f);
+        StartCoroutine(GoToVictory());
+
 	}
+
+    IEnumerator GoToVictory() {
+        yield return new WaitForSeconds(3.2f);
+        VictoryManager.Victory(1, 1, 1);
+
+    }
+
 }

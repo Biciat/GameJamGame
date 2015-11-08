@@ -1,11 +1,14 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.UI;
 using System;
 
 public class ToBattle : MonoBehaviour {
 
     public SlotSelector player1;
     public SlotSelector player2;
+
+
     Animation myDance;
     AudioSource mySound;
     static int NEXT_LEVEL = 1;
@@ -23,6 +26,7 @@ public class ToBattle : MonoBehaviour {
     public void GoToBattle() {
         int charP1 = player1.navPos;
         int charP2 = player2.navPos;
+
 
         PlayerPrefs.SetInt("p1",charP1);
         PlayerPrefs.SetInt("p2", charP2);
