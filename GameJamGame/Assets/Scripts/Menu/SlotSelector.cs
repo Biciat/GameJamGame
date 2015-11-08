@@ -6,7 +6,8 @@ using System;
 public class SlotSelector : MonoBehaviour
 {
     public PlayerSelect selector;
-    int navPos = 0;
+    [HideInInspector]
+    public int navPos = 0;
     public int startPos = 0;
 
 
