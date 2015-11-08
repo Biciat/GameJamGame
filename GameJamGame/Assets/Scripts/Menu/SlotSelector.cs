@@ -18,14 +18,22 @@ public class SlotSelector : MonoBehaviour
     //to extract to key configure
     private KeyCode p1l = KeyCode.A;
     private KeyCode p1r = KeyCode.D;
+    private KeyCode p1u = KeyCode.W;
+    private KeyCode p1d = KeyCode.S;
+
+
     private KeyCode p1go = KeyCode.Space;
 
     private KeyCode p2l = KeyCode.LeftArrow;
     private KeyCode p2r = KeyCode.RightArrow;
+    private KeyCode p2u = KeyCode.UpArrow;
+    private KeyCode p2d = KeyCode.DownArrow;
     private KeyCode p2go = KeyCode.Return;
 
     private KeyCode left;
     private KeyCode right;
+    private KeyCode up;
+    private KeyCode down;
     private KeyCode go;
 
     void Start()
@@ -34,12 +42,16 @@ public class SlotSelector : MonoBehaviour
         if (Player == 1) {
             left = p1l;
             right = p1r;
+            up = p1u;
+            down = p1d;
             go = p1go;
         }
 
         if (Player == 2) {
             left = p2l;
             right = p2r;
+            up = p2u;
+            down = p2d;
             go = p2go;
         }
 
@@ -53,13 +65,13 @@ public class SlotSelector : MonoBehaviour
 
         }
 
-        if (Input.GetKeyDown(left))
+        if (Input.GetKeyDown(left) || Input.GetKeyDown(up))
         {
             MoveNav(-1);
         }
 
 
-        if (Input.GetKeyDown(right))
+        if (Input.GetKeyDown(right) || Input.GetKeyDown(down))
         {
             MoveNav(1);
         }
