@@ -26,26 +26,39 @@ public BoxCollider hitBox;
 
 	// Use this for initialization
 	void Start () {
-		//anim = gameObject.GetComponent<Animator>();
+		anim = gameObject.GetComponent<Animator>();
 	}
 	
 	// Update is called once per frame
 	void FixedUpdate () {
-	
-		float yin = Input.GetAxis("Vertical");
-		float move = Input.GetAxis("Horizontal");
-		//anim.SetFloat("Movement", Mathf.Abs(move));
-	
+		anim = gameObject.GetComponent<Animator>();
+		float yin = 0;//= Input.GetAxis("Vertical");
+		float move = 0;// = Input.GetAxis("Horizontal");
+
+		if (transform.tag == "Player1") {
+			 yin = Input.GetAxis("Vertical");
+			 move = Input.GetAxis("Horizontal");
+		}
+		else if (transform.tag == "Player2") {
+			yin = Input.GetAxis("Vertical2");
+			move = Input.GetAxis("Horizontal2");
+		}
+
+
 		//face right or left
 		if (move != 0 && canMove) {
 			if (move < 0) {
 				right = false;
-			}
-			else {
+				walk_l();
+			} else {
 				right = true;
+				walk_r();
 			}
-			move *= Time.deltaTime*speed;
-			this.transform.position += new Vector3(move,0.0f,0.0f);
+			move *= Time.deltaTime * speed;
+			this.transform.position += new Vector3 (move, 0.0f, 0.0f);
+		} else if (move == 0 && !anim.GetBool("attack") && !anim.GetBool("jump")) {
+			idle();
+
 		}
 
 		Vector3 down = transform.TransformDirection(Vector3.down);
@@ -54,7 +67,8 @@ public BoxCollider hitBox;
 		if (Input.GetButtonUp ("Jump")) {
 			counterAllow = true;
 		}
-		if (Input.GetButton("Jump") && canMove) {
+
+		if (Input.GetKey(KeyCode.Space) && transform.tag == "Player1" && canMove) {
 			if (Physics.Raycast(transform.position, -Vector3.up, out hit, 100.0F)) {
 				distanceToGround = hit.distance;
 			}
@@ -62,23 +76,48 @@ public BoxCollider hitBox;
 			if (distanceToGround < 0.1 ) { //&& !onAir) {
 				//anim.SetBool("onAir",true);
 				GetComponent<Rigidbody>().AddForce(transform.up * jumpPower);
+				jump();
 				isJumping = true;
 			}
 			if (!dJump && counterAllow) {
 				//anim.SetTrigger("Jump");
 				GetComponent<Rigidbody>().velocity = new Vector3(GetComponent<Rigidbody>().velocity.x,0,0);
 				GetComponent<Rigidbody>().AddForce((transform.up * jumpPower));
+				jump();
 				dJump = true;
 				counterAllow = false;
 			}
 		}
+		else if (Input.GetKey(KeyCode.JoystickButton0) && transform.tag == "Player2" && canMove) {
+			if (Physics.Raycast(transform.position, -Vector3.up, out hit, 100.0F)) {
+				distanceToGround = hit.distance;
+			}
+			
+			if (distanceToGround < 0.1 ) { //&& !onAir) {
+				//anim.SetBool("onAir",true);
+				GetComponent<Rigidbody>().AddForce(transform.up * jumpPower);
+				jump();
+				isJumping = true;
+			}
+			if (!dJump && counterAllow) {
+				//anim.SetTrigger("Jump");
+				GetComponent<Rigidbody>().velocity = new Vector3(GetComponent<Rigidbody>().velocity.x,0,0);
+				GetComponent<Rigidbody>().AddForce((transform.up * jumpPower));
+				jump();
+				dJump = true;
+				counterAllow = false;
+			}
+		}
+		if (Input.GetMouseButtonDown(0) && transform.tag == "Player1") {
+			Attack ();
+		}
+		else if (Input.GetKeyDown (KeyCode.JoystickButton2) && transform.tag == "Player2") {
+			Attack ();
+		}
 	}
 
 	void Update() {
-		if (Input.GetButton("Fire3")) {
-			Debug.Log("Ataco");
-			Attack ();
-		}
+
 	}
 
 	void OnCollisionEnter(Collision crash) {
@@ -95,6 +134,42 @@ public BoxCollider hitBox;
 				//anim.SetBool("onAir",true);
 				dJump = false;
 		}
+	}
+
+	public void idle(){
+		anim.SetBool ("idle", true);
+		anim.SetBool ("walk_l", false);
+		anim.SetBool ("walk_r", false);
+		anim.SetBool ("jump", false);
+		anim.SetBool ("attack", false);
+	}
+	private void walk_r(){
+		anim.SetBool ("idle", false);
+		anim.SetBool ("walk_l", false);
+		anim.SetBool ("walk_r", true);
+		anim.SetBool ("jump", false);
+		anim.SetBool ("attack", false);
+	}
+	private void walk_l(){
+		anim.SetBool ("idle", false);
+		anim.SetBool ("walk_l", true);
+		anim.SetBool ("walk_r", false);
+		anim.SetBool ("jump", false);
+		anim.SetBool ("attack", false);
+	}
+	private void jump(){
+		anim.SetBool ("idle", false);
+		anim.SetBool ("walk_l", false);
+		anim.SetBool ("walk_r", false);
+		anim.SetBool ("jump", true);
+		anim.SetBool ("attack", false);
+	}
+	public void attack(){
+		anim.SetBool ("idle", false);
+		anim.SetBool ("walk_l", false);
+		anim.SetBool ("walk_r", false);
+		anim.SetBool ("jump", false);
+		anim.SetBool ("attack", true);
 	}
 	
 	public abstract void Attack();
