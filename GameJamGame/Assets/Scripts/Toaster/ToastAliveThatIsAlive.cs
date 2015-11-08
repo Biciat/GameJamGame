@@ -21,8 +21,8 @@ public class ToastAliveThatIsAlive : MonoBehaviour {
 		if (other.tag != self) {
 			if(other.gameObject.GetComponent<AliveObjectStats>() != null){
 				other.gameObject.GetComponent<AliveObjectStats>().getHurt(damage);
-				GameObject obj = Instantiate(puff, transform.position, Quaternion.identity) as GameObject;
 			}
+			GameObject obj = Instantiate(puff, transform.position, Quaternion.identity) as GameObject;
 			DestroyToast();
 		}
 	}
