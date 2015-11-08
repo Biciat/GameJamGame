@@ -2,28 +2,30 @@
 using System.Collections;
 
 abstract public class AliveObjectController : MonoBehaviour {
-
-
-[Header("Animation options")]
-public Animator anim;
-
-[Header("Movement options")]
-public float speed = 0.8f;
-public float jumpPower = 200;
-public bool canMove = true; 
-
-public bool onAir = true;
-public bool dJump = false;
-public bool isJumping= false;
-private bool Guard = false;
-private bool counterAllow =false;
-private float dJumpTime = 0.05f;
-private float dCounter =0; 
-public bool right = true;
-
-[Header("Attack options")]
-public BoxCollider hitBox;
-
+	
+	
+	[Header("Animation options")]
+	public Animator anim;
+	
+	[Header("Movement options")]
+	public float speed = 0.8f;
+	public float jumpPower = 200;
+	public bool canMove = true; 
+	
+	public bool onAir = true;
+	public bool dJump = false;
+	public bool isJumping= false;
+	private bool Guard = false;
+	private bool counterAllow =false;
+	private float dJumpTime = 0.05f;
+	private float dCounter =0; 
+	public bool right = true;
+	
+	public GameObject smoke;
+	
+	[Header("Attack options")]
+	public BoxCollider hitBox;
+	
 	// Use this for initialization
 	void Start () {
 		anim = gameObject.GetComponent<Animator>();
@@ -34,19 +36,20 @@ public BoxCollider hitBox;
 		anim = gameObject.GetComponent<Animator>();
 		float yin = 0;//= Input.GetAxis("Vertical");
 		float move = 0;// = Input.GetAxis("Horizontal");
-
+		
 		if (transform.tag == "Player1") {
-			 yin = Input.GetAxis("Vertical");
-			 move = Input.GetAxis("Horizontal");
+			yin = Input.GetAxis("Vertical");
+			move = Input.GetAxis("Horizontal");
 		}
 		else if (transform.tag == "Player2") {
 			yin = Input.GetAxis("Vertical2");
 			move = Input.GetAxis("Horizontal2");
 		}
-
-
+		
+		
 		//face right or left
 		if (move != 0 && canMove) {
+			if(!isJumping)smoke.GetComponent<ParticleSystem>().enableEmission = true;
 			if (move < 0) {
 				right = false;
 				walk_l();
@@ -57,17 +60,18 @@ public BoxCollider hitBox;
 			move *= Time.deltaTime * speed;
 			this.transform.position += new Vector3 (move, 0.0f, 0.0f);
 		} else if (move == 0 && !anim.GetBool("attack") && !anim.GetBool("jump")) {
+			smoke.GetComponent<ParticleSystem>().enableEmission = false;
 			idle();
-
+			
 		}
-
+		
 		Vector3 down = transform.TransformDirection(Vector3.down);
 		RaycastHit hit;
 		float distanceToGround = 0;
 		if (Input.GetButtonUp ("Jump")) {
 			counterAllow = true;
 		}
-
+		
 		if (Input.GetKey(KeyCode.Space) && transform.tag == "Player1" && canMove) {
 			if (Physics.Raycast(transform.position, -Vector3.up, out hit, 100.0F)) {
 				distanceToGround = hit.distance;
@@ -76,6 +80,7 @@ public BoxCollider hitBox;
 			if (distanceToGround < 0.1 ) { //&& !onAir) {
 				//anim.SetBool("onAir",true);
 				GetComponent<Rigidbody>().AddForce(transform.up * jumpPower);
+				smoke.GetComponent<ParticleSystem>().enableEmission = false;
 				jump();
 				isJumping = true;
 			}
@@ -83,12 +88,13 @@ public BoxCollider hitBox;
 				//anim.SetTrigger("Jump");
 				GetComponent<Rigidbody>().velocity = new Vector3(GetComponent<Rigidbody>().velocity.x,0,0);
 				GetComponent<Rigidbody>().AddForce((transform.up * jumpPower));
+				smoke.GetComponent<ParticleSystem>().enableEmission = false;
 				jump();
 				dJump = true;
 				counterAllow = false;
 			}
 		}
-		else if (Input.GetKey(KeyCode.JoystickButton0) && transform.tag == "Player2" && canMove) {
+		else if (Input.GetKey(KeyCode.RightControl) && transform.tag == "Player2" && canMove) {
 			if (Physics.Raycast(transform.position, -Vector3.up, out hit, 100.0F)) {
 				distanceToGround = hit.distance;
 			}
@@ -108,18 +114,18 @@ public BoxCollider hitBox;
 				counterAllow = false;
 			}
 		}
-		if (Input.GetMouseButtonDown(0) && transform.tag == "Player1") {
+		if (Input.GetKeyDown (KeyCode.E) && transform.tag == "Player1") {
 			Attack ();
 		}
-		else if (Input.GetKeyDown (KeyCode.JoystickButton2) && transform.tag == "Player2") {
+		else if (Input.GetKeyDown (KeyCode.Keypad0) && transform.tag == "Player2") {
 			Attack ();
 		}
 	}
-
+	
 	void Update() {
-
+		
 	}
-
+	
 	void OnCollisionEnter(Collision crash) {
 		if (crash.gameObject.layer.Equals(LayerMask.NameToLayer("Floor"))){ 		
 			//anim.SetBool("onAir",false);
@@ -127,15 +133,15 @@ public BoxCollider hitBox;
 			isJumping = false;
 			counterAllow = false;
 		}
-	  }
+	}
 	
 	void OnCollisionExit(Collision coll) {
 		if (coll.gameObject.layer == LayerMask.NameToLayer("Floor")) { 		
-				//anim.SetBool("onAir",true);
-				dJump = false;
+			//anim.SetBool("onAir",true);
+			dJump = false;
 		}
 	}
-
+	
 	public void idle(){
 		anim.SetBool ("idle", true);
 		anim.SetBool ("walk_l", false);
