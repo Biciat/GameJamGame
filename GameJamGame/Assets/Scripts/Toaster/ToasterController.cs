@@ -78,7 +78,7 @@ public class ToasterController : AliveObjectController {
 			new_toast.GetComponent<ToastAliveThatIsAlive> ().damage = toastDamage;
 			new_toast.GetComponent<Rigidbody> ().AddForce (-toastSpeed * transform.right);
 		} else {
-			new_toast = Instantiate (toast, toasterSpot.transform.position, Quaternion.Euler(toast.transform.rotation.x+180, toast.transform.rotation.y, toast.transform.rotation.z) ) as GameObject;
+			new_toast = Instantiate (toast, toasterSpot.transform.position, Quaternion.Euler(toast.transform.rotation.x-180, toast.transform.rotation.y+90, toast.transform.rotation.z+90) ) as GameObject;
 			new_toast.GetComponent<ToastAliveThatIsAlive> ().self = transform.tag;
 			new_toast.GetComponent<ToastAliveThatIsAlive> ().damage = toastDamage;
 			new_toast.GetComponent<Rigidbody> ().AddForce (toastSpeed * transform.right);

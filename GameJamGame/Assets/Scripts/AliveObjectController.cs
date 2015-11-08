@@ -21,6 +21,8 @@ private float dJumpTime = 0.05f;
 private float dCounter =0; 
 public bool right = true;
 
+public GameObject smoke;
+
 [Header("Attack options")]
 public BoxCollider hitBox;
 
@@ -47,6 +49,7 @@ public BoxCollider hitBox;
 
 		//face right or left
 		if (move != 0 && canMove) {
+			if(!isJumping)smoke.GetComponent<ParticleSystem>().enableEmission = true;
 			if (move < 0) {
 				right = false;
 				walk_l();
@@ -57,6 +60,7 @@ public BoxCollider hitBox;
 			move *= Time.deltaTime * speed;
 			this.transform.position += new Vector3 (move, 0.0f, 0.0f);
 		} else if (move == 0 && !anim.GetBool("attack") && !anim.GetBool("jump")) {
+			smoke.GetComponent<ParticleSystem>().enableEmission = false;
 			idle();
 
 		}
@@ -76,6 +80,7 @@ public BoxCollider hitBox;
 			if (distanceToGround < 0.1 ) { //&& !onAir) {
 				//anim.SetBool("onAir",true);
 				GetComponent<Rigidbody>().AddForce(transform.up * jumpPower);
+				smoke.GetComponent<ParticleSystem>().enableEmission = false;
 				jump();
 				isJumping = true;
 			}
@@ -83,6 +88,7 @@ public BoxCollider hitBox;
 				//anim.SetTrigger("Jump");
 				GetComponent<Rigidbody>().velocity = new Vector3(GetComponent<Rigidbody>().velocity.x,0,0);
 				GetComponent<Rigidbody>().AddForce((transform.up * jumpPower));
+				smoke.GetComponent<ParticleSystem>().enableEmission = false;
 				jump();
 				dJump = true;
 				counterAllow = false;
