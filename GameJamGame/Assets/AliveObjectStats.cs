@@ -16,6 +16,7 @@ public class AliveObjectStats : MonoBehaviour {
 
 	public void getHurt(int damageReceived) {
 		remainingLife -= damageReceived;
+		GetComponent<Animator> ().SetBool ("hit", true);
 		if (remainingLife <= 0) {
 			dead=true;
 			Die();
@@ -32,6 +33,7 @@ public class AliveObjectStats : MonoBehaviour {
 	}
 
 	private void Die() {
-		Destroy (gameObject); 
+		GetComponent<Animator> ().SetBool ("die", true);
+		Destroy (gameObject, 3.0f); 
 	}
 }

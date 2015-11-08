@@ -28,14 +28,15 @@ public class ToasterController : AliveObjectController {
 	}
 	
 	void Update () {
-		if(Input.GetKeyDown(KeyCode.UpArrow) && shotToasts < maxToasts){
-			if(cont >= rateCounter){
-				cont = 0;
-				shotIdle = 0;
-				Attack();
-			}
-		}
-		else shotIdle += Time.deltaTime;
+//		if(Input.GetKeyDown(KeyCode.UpArrow) && shotToasts < maxToasts){
+//			if(cont >= rateCounter){
+//				cont = 0;
+//				shotIdle = 0;
+//
+//				Attack();
+//			}
+//		}
+		if (shotToasts >= maxToasts) shotIdle += Time.deltaTime;
 		if(shotIdle >= shotIdleTime && shotToasts < maxToasts){
 			shotToasts = 0;
 			cont = rateCounter;
@@ -53,21 +54,34 @@ public class ToasterController : AliveObjectController {
 			onRecharge = false;
 		}
 	}
-	
+
 	public override void Attack() {
 		Debug.Log ("<color=purple>Eat that fucking toast bitch!</color>");
-		ShotToast ();
+		if(shotToasts < maxToasts){
+			if(cont >= rateCounter){
+				cont = 0;
+				shotIdle = 0;
+				attack ();
+				ShotToast ();
+			}
+		}
 	}
 	
 	public void ShotToast(){
-		GameObject new_toast = Instantiate (toast, toasterSpot.transform.position, Quaternion.identity) as GameObject;
-		Debug.Log (transform.tag);
-		new_toast.GetComponent<ToastAliveThatIsAlive> ().self = transform.tag;
-		new_toast.GetComponent<ToastAliveThatIsAlive> ().damage = toastDamage;
+//		GameObject new_toast = Instantiate (toast, toasterSpot.transform.position, toast.transform.rotation) as GameObject;
+//		new_toast.GetComponent<ToastAliveThatIsAlive> ().self = transform.tag;
+//		new_toast.GetComponent<ToastAliveThatIsAlive> ().damage = toastDamage;
+		GameObject new_toast = null;
 		if (transform.GetComponent<AliveObjectController> ().right) {
-			new_toast.GetComponent<Rigidbody> ().AddForce (toastSpeed * transform.right);
-		} else {
+			new_toast = Instantiate (toast, toasterSpot.transform.position, toast.transform.rotation) as GameObject;
+			new_toast.GetComponent<ToastAliveThatIsAlive> ().self = transform.tag;
+			new_toast.GetComponent<ToastAliveThatIsAlive> ().damage = toastDamage;
 			new_toast.GetComponent<Rigidbody> ().AddForce (-toastSpeed * transform.right);
+		} else {
+			new_toast = Instantiate (toast, toasterSpot.transform.position, Quaternion.Euler(toast.transform.rotation.x+180, toast.transform.rotation.y, toast.transform.rotation.z) ) as GameObject;
+			new_toast.GetComponent<ToastAliveThatIsAlive> ().self = transform.tag;
+			new_toast.GetComponent<ToastAliveThatIsAlive> ().damage = toastDamage;
+			new_toast.GetComponent<Rigidbody> ().AddForce (toastSpeed * transform.right);
 		}
 		++shotToasts;
 		Destroy (new_toast, 4.0f);

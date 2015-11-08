@@ -20,6 +20,8 @@ public class BeaterController : AliveObjectController {
 	public override void Attack ()
 	{
 		if (!dizzy) {
+			Debug.Log ("Ataco");
+			attack ();
 			if (Time.time - lastAttack >= secondsToResetDizziness) {
 				currentDizziness = 0f; 
 			} 
@@ -31,6 +33,8 @@ public class BeaterController : AliveObjectController {
 			if (currentDizziness >= dizzinessMax) {
 				StartCoroutine ("Dizzy");
 			}
+		} else {
+			Debug.Log ("Mareado");
 		}
 	}
 
